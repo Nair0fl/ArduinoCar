@@ -29,8 +29,7 @@ bool manual = true;
 
 enum Motor { LEFT, RIGHT};
 
-//unsigned char sensorAngle[NUM_ANGLES] = {60,70,80,90,100,110,120};
-unsigned char sensorAngle[NUM_ANGLES] = {60,72,84,96,108,120,130};
+unsigned char sensorAngle[NUM_ANGLES] = {70,82,94,106,118,130,140};
 unsigned int distance[NUM_ANGLES];
 
 
@@ -145,6 +144,7 @@ void loop() {
     _btBuffer = _btBuffer[0];
 
     if (manual == true){
+    servo.write(100);
 
         if (_btBuffer == "1" || _btBuffer == "2" || _btBuffer == "3" || _btBuffer == "7" || _btBuffer == "8" || _btBuffer == "9" || _btBuffer == "5"){
             Serial.println("Changement de direction");
@@ -154,14 +154,12 @@ void loop() {
             tone(bipPin,350,50);
         }
         else if(_btBuffer =="6" || _btBuffer =="4"){
-            
-            if (weapon < 90)
-            {
-                weapon = weapon + 10;
+            if(_btBuffer =="6" ){
+               weapon = 140;
                 servo2.write(weapon);
-            }
-            else{
-            weapon = 0;
+            }else{
+                            weapon = 20;
+              servo2.write(weapon);
             }
         }
         else if(_btBuffer == "#"){
@@ -187,11 +185,27 @@ void loop() {
         else if(motor_direction == '7'){
             go(LEFT,120);
             go(RIGHT,-255);
+
         }
 
         else if(motor_direction == '2'){
+            int dist=readDistance();
+            if(dist> 300){
             go(LEFT,255);
             go(RIGHT,255);
+            }else{
+              go(LEFT,120);
+              go(RIGHT,120);
+              if (weapon < 90)
+            {
+                  weapon = weapon + 10;
+                  servo2.write(weapon);
+              }
+              else{
+              weapon = 0;
+              }
+            }
+
         }
 
         else if(motor_direction =='8'){
